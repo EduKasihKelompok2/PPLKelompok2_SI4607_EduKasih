@@ -30,27 +30,21 @@ class ProfileController extends Controller
                 'password' => 'nullable|string|min:4|confirmed',
             ]);
 
-            // Update user details
             $user->name = $request->input('name');
             $user->nickname = $request->input('nickname');
             $user->gender = $request->input('gender');
             $user->institution = $request->input('institution');
             $user->nisn = $request->input('nisn');
 
-            // Handle profile photo upload
             if ($request->hasFile('profile_photo') && $request->file('profile_photo')->isValid()) {
-                // Delete old profile photo if exists
                 if ($user->photo && Storage::exists('public/profile_photos/' . $user->photo)) {
                     Storage::delete('public/profile_photos/' . $user->photo);
                 }
-
-                // Store new profile photo
                 $photoName = time() . '_' . $user->id . '.' . $request->profile_photo->extension();
                 $request->profile_photo->storeAs('public/profile_photos', $photoName);
                 $user->photo = $photoName;
             }
 
-            // Update password if provided
             if ($request->filled('password')) {
                 $user->password = bcrypt($request->input('password'));
             }
