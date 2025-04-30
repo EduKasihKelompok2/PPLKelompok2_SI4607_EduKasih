@@ -11,17 +11,17 @@ class JadwalBelajarController extends Controller
 {
     public function index()
     {
-        $dayOrder = [
+        $dayOrder = [ 
             'Senin' => 1,
             'Selasa' => 2,
             'Rabu' => 3,
             'Kamis' => 4,
             'Jumat' => 5,
             'Sabtu' => 6,
-            'Minggu' => 7
+            'Minggu' => 7 
         ];
 
-        $allJadwals = JadwalBelajar::where('user_id', auth()->user()->id)
+        $allJadwals = JadwalBelajar::where('user_id', auth()->user()->id) 
             ->orderBy('jam', 'asc')
             ->get();
 
@@ -53,7 +53,7 @@ class JadwalBelajarController extends Controller
                 'keterangan' => 'required',
             ]);
 
-            // Check if there's already a schedule with the same day and time for this user
+           
             $existingJadwal = JadwalBelajar::where('user_id', auth()->user()->id)
                 ->where('hari', $request->hari)
                 ->where('jam', $request->jam)
@@ -90,11 +90,11 @@ class JadwalBelajarController extends Controller
 
             $jadwal = JadwalBelajar::findOrFail($id);
 
-            // Check if there's already another schedule with the same day and time
+            
             $existingJadwal = JadwalBelajar::where('user_id', auth()->user()->id)
                 ->where('hari', $request->hari)
                 ->where('jam', $request->jam)
-                ->where('id', '!=', $id) // Exclude the current jadwal from the check
+                ->where('id', '!=', $id) 
                 ->first();
 
             if ($existingJadwal) {
@@ -110,6 +110,18 @@ class JadwalBelajarController extends Controller
             ]);
 
             return redirect()->back()->with('success', 'Jadwal Belajar Berhasil Diperbarui');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $jadwal = JadwalBelajar::findOrFail($id);
+            $jadwal->delete();
+
+            return redirect()->back()->with('success', 'Jadwal Belajar Berhasil Dihapus');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }

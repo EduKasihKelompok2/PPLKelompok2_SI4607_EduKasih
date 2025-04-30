@@ -11,7 +11,7 @@
         </button>
     </div>
 
-    <!-- Flash Messages -->
+    
     @if (session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
@@ -93,7 +93,7 @@
     @endif
 </div>
 
-<!-- Add Schedule Modal -->
+
 <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -168,7 +168,7 @@
     </div>
 </div>
 
-<!-- Edit Schedule Modal (Single reusable modal) -->
+
 <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-labelledby="editScheduleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -244,9 +244,34 @@
 </div>
 
 
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" id="deleteConfirmModalLabel">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="bi bi-exclamation-triangle text-warning fs-1 mb-3 d-block"></i>
+                <h5>Apakah Anda yakin ingin menghapus jadwal belajar ini?</h5>
+                <p class="text-muted mb-0" id="delete_jadwal_info"></p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Batal</button>
+                <form id="deleteJadwalForm" action="" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger px-4">Hapus</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('styles')
 <style>
-    /* Card hover effect */
+    
     .card {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
@@ -256,7 +281,7 @@
         box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
     }
 
-    /* Button styles */
+   
     .btn {
         border-radius: 4px;
         transition: all 0.2s;
@@ -266,7 +291,7 @@
         transform: translateY(-2px);
     }
 
-    /* Custom icons for different subjects */
+   
     .schedule-icon {
         width: 40px;
         height: 40px;
@@ -276,13 +301,13 @@
         border-radius: 50%;
     }
 
-    /* Modal animation */
+    
     .modal .modal-content {
         border-radius: 10px;
         box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
     }
 
-    /* Input focus states */
+    
     .form-control:focus,
     .form-select:focus {
         border-color: #86b7fe;
@@ -294,13 +319,13 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize any tooltips
+        
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
 
-        // Auto dismiss alerts after 5 seconds
+        
         setTimeout(function() {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(function(alert) {
@@ -311,7 +336,7 @@
             });
         }, 5000);
 
-        // Edit button click handler
+        
         const editButtons = document.querySelectorAll('.btn-edit');
         const editModal = new bootstrap.Modal(document.getElementById('editScheduleModal'));
 
@@ -323,20 +348,43 @@
                 const hari = this.getAttribute('data-hari');
                 const keterangan = this.getAttribute('data-keterangan');
 
-                // Set form action URL
+                
                 document.getElementById('editScheduleForm').action = `/jadwal-belajar/${id}`;
 
-                // Fill form fields
+                
                 document.getElementById('edit_nama_mapel').value = nama;
                 document.getElementById('edit_jam').value = jam;
                 document.getElementById('edit_hari').value = hari;
                 document.getElementById('edit_keterangan').value = keterangan;
 
-                // Show modal using Bootstrap's API
+                
                 editModal.show();
             });
         });
-    });
+
+
+         
+        const deleteButtons = document.querySelectorAll('.btn-delete');
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+
+        deleteButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const nama = this.getAttribute('data-nama');
+                const hari = this.getAttribute('data-hari');
+                const jam = this.getAttribute('data-jam');
+
+                
+                document.getElementById('deleteJadwalForm').action = `/jadwal-belajar/${id}`;
+
+                
+                document.getElementById('delete_jadwal_info').textContent = `${nama} - ${hari} ${jam}`;
+
+                
+                deleteModal.show();
+            });
+        });
+    });  
 </script>
 @endpush
 
