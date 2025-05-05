@@ -50,10 +50,10 @@ class JadwalBelajarController extends Controller
                 'nama_mapel' => 'required',
                 'hari' => 'required',
                 'jam' => 'required',
+                'tanggal' => 'required|date', 
                 'keterangan' => 'required',
             ]);
 
-           
             $existingJadwal = JadwalBelajar::where('user_id', auth()->user()->id)
                 ->where('hari', $request->hari)
                 ->where('jam', $request->jam)
@@ -69,6 +69,7 @@ class JadwalBelajarController extends Controller
                 'nama_mapel' => $request->nama_mapel,
                 'hari' => $request->hari,
                 'jam' => $request->jam,
+                'tanggal' => $request->tanggal, // Menyimpan tanggal ke database
                 'keterangan' => $request->keterangan,
             ]);
 
@@ -85,16 +86,16 @@ class JadwalBelajarController extends Controller
                 'nama_mapel' => 'required',
                 'hari' => 'required',
                 'jam' => 'required',
+                'tanggal' => 'required|date', 
                 'keterangan' => 'required',
             ]);
 
             $jadwal = JadwalBelajar::findOrFail($id);
 
-            
             $existingJadwal = JadwalBelajar::where('user_id', auth()->user()->id)
                 ->where('hari', $request->hari)
                 ->where('jam', $request->jam)
-                ->where('id', '!=', $id) 
+                ->where('id', '!=', $id)
                 ->first();
 
             if ($existingJadwal) {
@@ -106,6 +107,7 @@ class JadwalBelajarController extends Controller
                 'nama_mapel' => $request->nama_mapel,
                 'hari' => $request->hari,
                 'jam' => $request->jam,
+                'tanggal' => $request->tanggal, 
                 'keterangan' => $request->keterangan,
             ]);
 

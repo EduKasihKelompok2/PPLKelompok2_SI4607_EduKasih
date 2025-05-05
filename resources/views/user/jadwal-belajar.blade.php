@@ -11,7 +11,6 @@
         </button>
     </div>
 
-    
     @if (session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
@@ -59,6 +58,12 @@
                             <tbody>
                                 <tr>
                                     <th class="text-muted" style="width: 120px;">
+                                        <i class="bi bi-calendar-date me-1"></i> Tanggal
+                                    </th>
+                                    <td class="fw-medium">{{ $jadwal->tanggal }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted" style="width: 120px;">
                                         <i class="bi bi-clock me-1"></i> Waktu
                                     </th>
                                     <td class="fw-medium">{{ $jadwal->jam }}</td>
@@ -75,12 +80,12 @@
                     <div class="d-flex mt-3">
                         <button class="btn btn-primary btn-sm me-2 btn-edit" data-id="{{ $jadwal->id }}"
                             data-nama="{{ $jadwal->nama_mapel }}" data-jam="{{ $jadwal->jam }}"
-                            data-hari="{{ $jadwal->hari }}" data-keterangan="{{ $jadwal->keterangan }}">
+                            data-hari="{{ $jadwal->hari }}" data-tanggal="{{ $jadwal->tanggal }}" data-keterangan="{{ $jadwal->keterangan }}">
                             <i class="bi bi-pencil me-1"></i> EDIT
                         </button>
                         <button class="btn btn-danger btn-sm btn-delete" data-id="{{ $jadwal->id }}"
                             data-nama="{{ $jadwal->nama_mapel }}" data-jam="{{ $jadwal->jam }}"
-                            data-hari="{{ $jadwal->hari }}">
+                            data-hari="{{ $jadwal->hari }}" data-tanggal="{{ $jadwal->tanggal }}">
                             <i class="bi bi-trash me-1"></i> HAPUS
                         </button>
                     </div>
@@ -92,7 +97,6 @@
     @endforeach
     @endif
 </div>
-
 
 <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -151,6 +155,14 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="tanggal" class="form-label">Tanggal</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
+                            <input type="date" class="form-control" id="tanggal" name="tanggal" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="keterangan" class="form-label">Keterangan</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-info-circle"></i></span>
@@ -167,7 +179,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-labelledby="editScheduleModalLabel"
     aria-hidden="true">
@@ -226,6 +237,14 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="edit_tanggal" class="form-label">Tanggal</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
+                            <input type="date" class="form-control" id="edit_tanggal" name="tanggal" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="edit_keterangan" class="form-label">Keterangan</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-info-circle"></i></span>
@@ -242,7 +261,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel"
     aria-hidden="true">
@@ -271,7 +289,7 @@
 
 @push('styles')
 <style>
-    
+    /* Card hover effect */
     .card {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
@@ -281,7 +299,7 @@
         box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
     }
 
-   
+    /* Button styles */
     .btn {
         border-radius: 4px;
         transition: all 0.2s;
@@ -291,7 +309,7 @@
         transform: translateY(-2px);
     }
 
-   
+    /* Custom icons for different subjects */
     .schedule-icon {
         width: 40px;
         height: 40px;
@@ -301,13 +319,13 @@
         border-radius: 50%;
     }
 
-    
+    /* Modal animation */
     .modal .modal-content {
         border-radius: 10px;
         box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
     }
 
-    
+    /* Input focus states */
     .form-control:focus,
     .form-select:focus {
         border-color: #86b7fe;
@@ -319,13 +337,13 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        
+        // Initialize any tooltips
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
 
-        
+        // Auto dismiss alerts after 5 seconds
         setTimeout(function() {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(function(alert) {
@@ -336,7 +354,7 @@
             });
         }, 5000);
 
-        
+        // Edit button click handler
         const editButtons = document.querySelectorAll('.btn-edit');
         const editModal = new bootstrap.Modal(document.getElementById('editScheduleModal'));
 
@@ -346,24 +364,25 @@
                 const nama = this.getAttribute('data-nama');
                 const jam = this.getAttribute('data-jam');
                 const hari = this.getAttribute('data-hari');
+                const tanggal = this.getAttribute('data-tanggal');
                 const keterangan = this.getAttribute('data-keterangan');
 
-                
+                // Set form action URL
                 document.getElementById('editScheduleForm').action = `/jadwal-belajar/${id}`;
 
-                
+                // Fill form fields
                 document.getElementById('edit_nama_mapel').value = nama;
                 document.getElementById('edit_jam').value = jam;
                 document.getElementById('edit_hari').value = hari;
+                document.getElementById('edit_tanggal').value = tanggal;
                 document.getElementById('edit_keterangan').value = keterangan;
 
-                
+                // Show modal using Bootstrap's API
                 editModal.show();
             });
         });
 
-
-         
+        // Delete button click handler
         const deleteButtons = document.querySelectorAll('.btn-delete');
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
 
@@ -372,19 +391,20 @@
                 const id = this.getAttribute('data-id');
                 const nama = this.getAttribute('data-nama');
                 const hari = this.getAttribute('data-hari');
+                const tanggal = this.getAttribute('data-tanggal');
                 const jam = this.getAttribute('data-jam');
 
-                
+                // Set form action URL
                 document.getElementById('deleteJadwalForm').action = `/jadwal-belajar/${id}`;
 
-                
+                // Set confirmation text
                 document.getElementById('delete_jadwal_info').textContent = `${nama} - ${hari} ${jam}`;
 
-                
+                // Show modal using Bootstrap's API
                 deleteModal.show();
             });
         });
-    });  
+    });
 </script>
 @endpush
 
