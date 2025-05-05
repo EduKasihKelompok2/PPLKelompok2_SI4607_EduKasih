@@ -7,13 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class JadwalBelajar extends Model
 {
     protected $table = 'jadwal_belajar';
+    
+    
     protected $fillable = [
         'id',
         'user_id',
         'nama_mapel',
         'hari',
         'jam',
-        'keterangan'
+        'tanggal', 
+        'keterangan',
     ];
 
     public function user()
