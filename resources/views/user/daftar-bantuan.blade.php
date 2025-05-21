@@ -39,9 +39,8 @@
         </div>
     </div>
 
-    <!-- Scholarships Grid -->
     <div class="row" id="scholarshipsContainer">
-        <!-- Scholarship 1 -->
+        <!-- Beasiswa 1 -->
         <div class="col-md-6 mb-4">
             <div class="card h-100 shadow-sm hover-shadow">
                 <div class="card-body p-0">
@@ -73,3 +72,4 @@
                 </div>
             </div>
         </div>
+
