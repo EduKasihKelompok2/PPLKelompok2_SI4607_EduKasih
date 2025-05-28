@@ -11,7 +11,6 @@
         </button>
     </div>
 
-    <!-- Flash Messages -->
     @if (session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
@@ -59,6 +58,12 @@
                             <tbody>
                                 <tr>
                                     <th class="text-muted" style="width: 120px;">
+                                        <i class="bi bi-calendar-date me-1"></i> Tanggal
+                                    </th>
+                                    <td class="fw-medium">{{ $jadwal->tanggal }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-muted" style="width: 120px;">
                                         <i class="bi bi-clock me-1"></i> Waktu
                                     </th>
                                     <td class="fw-medium">{{ $jadwal->jam }}</td>
@@ -75,12 +80,12 @@
                     <div class="d-flex mt-3">
                         <button class="btn btn-primary btn-sm me-2 btn-edit" data-id="{{ $jadwal->id }}"
                             data-nama="{{ $jadwal->nama_mapel }}" data-jam="{{ $jadwal->jam }}"
-                            data-hari="{{ $jadwal->hari }}" data-keterangan="{{ $jadwal->keterangan }}">
+                            data-hari="{{ $jadwal->hari }}" data-tanggal="{{ $jadwal->tanggal }}" data-keterangan="{{ $jadwal->keterangan }}">
                             <i class="bi bi-pencil me-1"></i> EDIT
                         </button>
                         <button class="btn btn-danger btn-sm btn-delete" data-id="{{ $jadwal->id }}"
                             data-nama="{{ $jadwal->nama_mapel }}" data-jam="{{ $jadwal->jam }}"
-                            data-hari="{{ $jadwal->hari }}">
+                            data-hari="{{ $jadwal->hari }}" data-tanggal="{{ $jadwal->tanggal }}">
                             <i class="bi bi-trash me-1"></i> HAPUS
                         </button>
                     </div>
@@ -93,7 +98,6 @@
     @endif
 </div>
 
-<!-- Add Schedule Modal -->
 <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -151,6 +155,14 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="tanggal" class="form-label">Tanggal</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
+                            <input type="date" class="form-control" id="tanggal" name="tanggal" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="keterangan" class="form-label">Keterangan</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-info-circle"></i></span>
@@ -168,7 +180,6 @@
     </div>
 </div>
 
-<!-- Edit Schedule Modal (Single reusable modal) -->
 <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-labelledby="editScheduleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -226,6 +237,14 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="edit_tanggal" class="form-label">Tanggal</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
+                            <input type="date" class="form-control" id="edit_tanggal" name="tanggal" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="edit_keterangan" class="form-label">Keterangan</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-info-circle"></i></span>
@@ -243,6 +262,30 @@
     </div>
 </div>
 
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" id="deleteConfirmModalLabel">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="bi bi-exclamation-triangle text-warning fs-1 mb-3 d-block"></i>
+                <h5>Apakah Anda yakin ingin menghapus jadwal belajar ini?</h5>
+                <p class="text-muted mb-0" id="delete_jadwal_info"></p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Batal</button>
+                <form id="deleteJadwalForm" action="" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger px-4">Hapus</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 @push('styles')
 <style>
@@ -321,6 +364,7 @@
                 const nama = this.getAttribute('data-nama');
                 const jam = this.getAttribute('data-jam');
                 const hari = this.getAttribute('data-hari');
+                const tanggal = this.getAttribute('data-tanggal');
                 const keterangan = this.getAttribute('data-keterangan');
 
                 // Set form action URL
@@ -330,10 +374,34 @@
                 document.getElementById('edit_nama_mapel').value = nama;
                 document.getElementById('edit_jam').value = jam;
                 document.getElementById('edit_hari').value = hari;
+                document.getElementById('edit_tanggal').value = tanggal;
                 document.getElementById('edit_keterangan').value = keterangan;
 
                 // Show modal using Bootstrap's API
                 editModal.show();
+            });
+        });
+
+        // Delete button click handler
+        const deleteButtons = document.querySelectorAll('.btn-delete');
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+
+        deleteButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const nama = this.getAttribute('data-nama');
+                const hari = this.getAttribute('data-hari');
+                const tanggal = this.getAttribute('data-tanggal');
+                const jam = this.getAttribute('data-jam');
+
+                // Set form action URL
+                document.getElementById('deleteJadwalForm').action = `/jadwal-belajar/${id}`;
+
+                // Set confirmation text
+                document.getElementById('delete_jadwal_info').textContent = `${nama} - ${hari} ${jam}`;
+
+                // Show modal using Bootstrap's API
+                deleteModal.show();
             });
         });
     });
