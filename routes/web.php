@@ -38,9 +38,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('forum/{id}/reply', [App\Http\Controllers\ForumController::class, 'reply'])->name('forum.reply');
 
     //Activity
+    //Activity
     Route::get('/activity', [App\Http\Controllers\User\ActivityController::class, 'index'])->name('activity');
     Route::delete('/activity/{id}', [App\Http\Controllers\User\ActivityController::class, 'destroy'])->name('activity.destroy');
-
     //Jadwal Belajar
     Route::get('/jadwal-belajar', [JadwalBelajarController::class, 'index'])->name('jadwal-belajar');
     Route::post('/jadwal-belajar', [JadwalBelajarController::class, 'store']);

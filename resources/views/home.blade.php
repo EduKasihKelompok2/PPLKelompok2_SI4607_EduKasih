@@ -18,7 +18,7 @@
         ['icon' => 'journal-text', 'text' => 'Bank Soal', 'link' => route('bank-soal')],
         ['icon' => 'lightbulb', 'text' => 'Artikel Motivasi', 'link' => '#'],
         ['icon' => 'question-circle', 'text' => 'FAQ', 'link' => route('faq')],
-        ['icon' => 'clock-history', 'text' => 'Riwayat Aktivitas', 'link' => '#'],
+        ['icon' => 'clock-history', 'text' => 'Riwayat Aktivitas', 'link' => route('activity')],
         ];
         @endphp
 
