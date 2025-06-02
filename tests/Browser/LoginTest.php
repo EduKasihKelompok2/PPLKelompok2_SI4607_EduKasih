@@ -10,11 +10,26 @@ class LoginTest extends DuskTestCase
 {
     /**
      * A Dusk test example.
+
+
      * @group register
      */
     public function testExample(): void
     {
         $this->browse(function (Browser $browser) {
+
+            $browser->visit('/')
+            ->assertSee('Login')
+            ->clickLink('login')
+            ->type('email', 'akbar@gmail.com')
+            ->type('password', 'bocilepep') 
+            ->press('Login') 
+            ->assertPathIs('/dashboard') 
+            ->assertSee('Login');
+        });
+    }
+}
+
 
             $browser->visit('/')
                 ->assertPathIs('/login')
@@ -26,3 +41,4 @@ class LoginTest extends DuskTestCase
         });
     }
 }
+
