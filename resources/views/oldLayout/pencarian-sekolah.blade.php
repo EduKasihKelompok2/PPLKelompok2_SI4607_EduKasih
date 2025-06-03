@@ -61,7 +61,6 @@
         object-fit: cover;
     }
 
-    
     .card {
         border-radius: 10px;
         overflow: hidden;

@@ -7,7 +7,10 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Illuminate\Support\Facades\Storage;
 
-class soalTest extends DuskTestCase
+
+class UploadTest extends DuskTestCase
+
+25dd68c093c733cb8e27cb8dc19cd2181cfea57a
 {
     public function testExample(): void
     {
