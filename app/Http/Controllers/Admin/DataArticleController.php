@@ -17,7 +17,7 @@ class DataArticleController extends Controller
     public function indexPendidikan(Request $request)
     {
         $articles = Articles::pendidikan()->filter(request(['search']))->latest()->paginate(10)->withQueryString();
-        return view('admin.articles.article-pendidikan', compact('articles'));
+        return view('admin.articles.article-pendidikan', compact('articles')); 
     }
 
     public function store(Request $request)
