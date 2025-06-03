@@ -55,7 +55,7 @@ class DataRewardsController extends Controller
         $data = $request->only(['name', 'description', 'badge_id']);
 
         if ($request->hasFile('file')) {
-           
+          
             if ($reward->file_path) {
                 Storage::disk('public')->delete($reward->file_path);
             }
