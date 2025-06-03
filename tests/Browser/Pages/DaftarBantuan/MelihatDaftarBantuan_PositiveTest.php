@@ -14,7 +14,7 @@ class MelihatDaftarBantuan_PositiveTest extends DuskTestCase
             $user = User::factory()->create();
 
             $browser->loginAs($user)
-                    ->visit('/help')
+                    ->visit('/daftar-bantuan')
                     ->assertSee('Daftar Bantuan');
         });
     }

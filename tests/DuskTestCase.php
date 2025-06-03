@@ -35,7 +35,7 @@ abstract class DuskTestCase extends BaseTestCase
             '--disable-dev-shm-usage',
         ]);
 
-        $options->setBinary('C:\Program Files\Google\Chrome\Application\chrome.exe'); // Update path if needed
+        $options->setBinary('C:/Users/ASUS/AppData/Local/Google/Chrome/Application/chrome.exe');
 
         return RemoteWebDriver::create(
             'http://localhost:9515',
