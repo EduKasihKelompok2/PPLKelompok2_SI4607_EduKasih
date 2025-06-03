@@ -23,7 +23,7 @@ class Articles extends Model
 
      public function scopePendidikan($query)
     {
-        return $query->where('type', 'pendidikan');
+        return $query->where('type', 'pendidikan'); 
     }
 
     public function scopeFilter($query, array $filters)
