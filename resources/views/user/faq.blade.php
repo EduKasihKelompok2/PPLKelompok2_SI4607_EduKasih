@@ -2,50 +2,6 @@
 
 @section('title', 'FAQ')
 
-@php
-// Dummy FAQ data
-$faqData = [
-[
-'id' => 'headingOne',
-'question' => 'Apa itu Edukasih?',
-'answer' => 'Edukasih adalah sebuah website yang hadir sebagai solusi inovatif dalam meningkatkan keberlanjutan
-pendidikan bagi siswa yang bersekolah pada sekolah.'
-],
-[
-'id' => 'headingTwo',
-'question' => 'Bagaimana cara mendapatkan bantuan Edukasih?',
-'answer' => 'Untuk mendapatkan bantuan Edukasih, Anda perlu mendaftar melalui platform kami dan melengkapi semua
-persyaratan yang diminta. Tim kami akan meninjau aplikasi Anda dan menghubungi Anda untuk langkah selanjutnya.'
-],
-[
-'id' => 'headingThree',
-'question' => 'Mengapa tidak dapat mendownload video belajar?',
-'answer' => 'Video belajar di platform kami dilindungi hak cipta dan hanya tersedia untuk streaming online. Hal ini
-untuk melindungi konten intelektual dan memastikan kualitas pembelajaran tetap terjaga. Namun, Anda dapat mengakses
-video kapan saja selama memiliki koneksi internet.'
-],
-[
-'id' => 'headingFour',
-'question' => 'Cara akses profile kita',
-'answer' => 'Untuk mengakses profil Anda, silakan login ke akun Anda terlebih dahulu. Setelah berhasil login, klik pada
-ikon profil di pojok kanan atas halaman. Dari sana, Anda dapat melihat dan mengedit informasi profil Anda, termasuk data
-pribadi dan pengaturan akun.'
-],
-[
-'id' => 'headingFive',
-'question' => 'Apakah Edukasih menyediakan kursus gratis?',
-'answer' => 'Ya, Edukasih menyediakan beberapa kursus gratis untuk pengguna. Anda dapat menjelajahi katalog kami untuk
-menemukan kursus yang tersedia tanpa biaya.'
-],
-[
-'id' => 'headingSix',
-'question' => 'Apakah Edukasih tersedia di perangkat mobile?',
-'answer' => 'Ya, Edukasih dapat diakses melalui browser di perangkat mobile. Kami juga sedang mengembangkan aplikasi
-mobile yang akan segera dirilis.'
-]
-];
-@endphp
-
 @section('content')
 <div class="container py-4">
     <!-- FAQ Header Card -->
@@ -83,23 +39,27 @@ mobile yang akan segera dirilis.'
 
     <!-- FAQ Accordion -->
     <div class="accordion" id="faqAccordion">
-        @foreach($faqData as $index => $faq)
-        <div class="accordion-item faq-item" data-question="{{ $faq['question'] }}" data-answer="{{ $faq['answer'] }}">
-            <h2 class="accordion-header" id="{{ $faq['id'] }}">
+        @forelse($faqs as $index => $faq)
+        <div class="accordion-item faq-item" data-question="{{ $faq->question }}" data-answer="{{ $faq->answer }}">
+            <h2 class="accordion-header" id="heading{{ $faq->id }}">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapse{{ $faq['id'] }}" aria-expanded="false"
-                    aria-controls="collapse{{ $faq['id'] }}">
-                    {{ $faq['question'] }}
+                    data-bs-target="#collapse{{ $faq->id }}" aria-expanded="false"
+                    aria-controls="collapse{{ $faq->id }}">
+                    {{ $faq->question }}
                 </button>
             </h2>
-            <div id="collapse{{ $faq['id'] }}" class="accordion-collapse collapse" aria-labelledby="{{ $faq['id'] }}"
+            <div id="collapse{{ $faq->id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $faq->id }}"
                 data-bs-parent="#faqAccordion">
                 <div class="accordion-body">
-                    {{ $faq['answer'] }}
+                    {{ $faq->answer }}
                 </div>
             </div>
         </div>
-        @endforeach
+        @empty
+        <div class="text-center py-5">
+            <p class="text-muted">No FAQs available at the moment.</p>
+        </div>
+        @endforelse
     </div>
 </div>
 @endsection

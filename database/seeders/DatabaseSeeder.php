@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class, //Must be first
             UserSeeder::class,
             BankSoalSeeder::class,
+            FaqSeeder::class,
         ]);
     }
 }

@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
@@ -52,6 +52,68 @@
                         </li>
                         @endif
                         @else
+                        {{-- Notification --}}
+                        <li class="nav-item dropdown">
+                            <a id="notificationDropdown"
+                                class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#"
+                                role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                v-pre>
+                                <i
+                                    class="bi bi-bell {{ Auth::user()->unreadNotifications->count() > 0 ? 'text-warning' : '' }}"></i>
+                                <span class="badge bg-danger rounded-pill ms-1" id="notificationCount">
+                                    {{ Auth::user()->unreadNotifications->count() }}
+                                </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown"
+                                style="min-width: 350px; max-height: 400px; overflow-y: auto;">
+                                <div class="dropdown-header d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">Notifikasi</h6>
+                                    @if (Auth::user()->unreadNotifications->count() > 0)
+                                    <button class="btn btn-link btn-sm p-0 text-primary" id="markAllReadBtn">
+                                        Tandai Semua Dibaca
+                                    </button>
+                                    @endif
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div id="notificationList">
+                                    @if (Auth::user()->unreadNotifications->count() > 0)
+                                    @foreach (Auth::user()->unreadNotifications->take(5) as $notification)
+                                    <div class="dropdown-item notification-item" data-id="{{ $notification->id }}"
+                                        style="white-space: normal; cursor: pointer;">
+                                        <div class="d-flex align-items-start">
+                                            <div class="flex-grow-1">
+                                                <div class="fw-bold">{{ $notification->data['title'] ?? 'Notifikasi' }}
+                                                </div>
+                                                <p class="mb-1 text-muted small">{{ $notification->message }}</p>
+                                                <small class="text-muted">{{ $notification->created_at->diffForHumans()
+                                                    }}</small>
+                                            </div>
+                                            <div class="ms-2">
+                                                <span class="badge bg-primary rounded-circle"
+                                                    style="width: 8px; height: 8px;"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                    @if (Auth::user()->unreadNotifications->count() > 5)
+                                    <div class="dropdown-item text-center">
+                                        <small class="text-muted">{{ Auth::user()->unreadNotifications->count() - 5 }}
+                                            notifikasi lainnya...</small>
+                                    </div>
+                                    @endif
+                                    @else
+                                    <div class="dropdown-item text-center">
+                                        <div class="py-3">
+                                            <i class="bi bi-bell-slash text-muted" style="font-size: 2rem;"></i>
+                                            <p class="mb-0 text-muted">Tidak ada notifikasi baru</p>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </li>
+                        {{-- End Notification --}}
+
                         <li class="nav-item">
                             <a class="nav-link active text-white d-flex align-items-center"
                                 href="{{ Auth::check() && Auth::user()->hasRole('admin') ? route('admin.home') : route('home') }}">
@@ -124,7 +186,150 @@
             border-radius: 5px;
             color: #5D5FEF !important;
         }
+
+        .notification-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .notification-item {
+            border-left: 3px solid #007bff;
+        }
+
+        .notification-item.read {
+            border-left-color: transparent;
+            opacity: 0.7;
+        }
+
+        .dropdown-menu {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        #notificationCount {
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        #notificationCount.hide {
+            opacity: 0;
+            transform: scale(0);
+        }
     </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get CSRF token
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            // Mark individual notification as read
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const notificationId = this.getAttribute('data-id');
+
+                    fetch(`/notification/mark-as-read/${notificationId}`, {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Mark as read visually
+                        this.classList.add('read');
+                        this.querySelector('.badge').style.display = 'none';
+
+                        // Update notification count
+                        updateNotificationCount();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            });
+
+            // Mark all notifications as read
+            const markAllReadBtn = document.getElementById('markAllReadBtn');
+            if (markAllReadBtn) {
+                markAllReadBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    fetch('/notification/mark-all-as-read', {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Mark all as read visually
+                        document.querySelectorAll('.notification-item').forEach(item => {
+                            item.classList.add('read');
+                            const badge = item.querySelector('.badge');
+                            if (badge) badge.style.display = 'none';
+                        });
+
+                        // Hide mark all read button
+                        this.style.display = 'none';
+
+                        // Update notification count to 0
+                        const notificationCount = document.getElementById('notificationCount');
+                        notificationCount.textContent = '0';
+                        notificationCount.classList.add('hide');
+
+                        // Update bell icon
+                        const bellIcon = document.querySelector('#notificationDropdown i');
+                        bellIcon.classList.remove('text-warning');
+
+                        // Show success message (optional)
+                        showNotificationMessage('Semua notifikasi telah ditandai sebagai dibaca');
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotificationMessage('Gagal menandai notifikasi', 'error');
+                    });
+                });
+            }
+
+            function updateNotificationCount() {
+                const unreadItems = document.querySelectorAll('.notification-item:not(.read)').length;
+                const notificationCount = document.getElementById('notificationCount');
+                const bellIcon = document.querySelector('#notificationDropdown i');
+                const markAllReadBtn = document.getElementById('markAllReadBtn');
+
+                notificationCount.textContent = unreadItems;
+
+                if (unreadItems === 0) {
+                    notificationCount.classList.add('hide');
+                    bellIcon.classList.remove('text-warning');
+                    if (markAllReadBtn) markAllReadBtn.style.display = 'none';
+                } else {
+                    notificationCount.classList.remove('hide');
+                    bellIcon.classList.add('text-warning');
+                }
+            }
+
+            function showNotificationMessage(message, type = 'success') {
+                // Create a toast notification
+                const toast = document.createElement('div');
+                toast.className = `alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show position-fixed`;
+                toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                toast.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+
+                document.body.appendChild(toast);
+
+                // Auto remove after 3 seconds
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 3000);
+            }
+        });
+    </script>
 
     @stack('scripts')
 </body>

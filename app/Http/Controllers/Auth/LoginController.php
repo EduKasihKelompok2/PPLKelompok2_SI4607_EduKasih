@@ -3,11 +3,18 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use Auth;
 use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
+
+    private $activity;
+    public function __construct()
+    {
+        $this->activity = new Activity();
+    }
     public function login()
     {
         return view('auth.login');
@@ -29,6 +36,8 @@ class LoginController extends Controller
                 return redirect()->route('admin.home');
             }
 
+
+            $this->activity->saveActivity('Login Akun');
             return redirect()->route('home');
         }
 

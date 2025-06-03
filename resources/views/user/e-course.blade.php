@@ -61,18 +61,26 @@
         @if($courses->count() > 0)
         @foreach($courses as $course)
         <div class="col-md-6 col-lg-4">
-            <a href="{{route('e-course.show','123')}}" class="card-link text-decoration-none text-dark">
+            <a href="{{ route('e-course.show', $course->id) }}" class="card-link text-decoration-none text-dark">
                 <div class="card h-100 shadow-sm course-card">
-                    <img src="{{ $course['image'] }}" class="card-img-top" alt="{{ $course['title'] }}">
+                    <img src="{{ $course->image ?? 'https://source.unsplash.com/random/600x400/?education' }}"
+                        class="card-img-top" alt="{{ $course->course_name }}">
                     <div class="position-absolute top-0 end-0 p-2">
                         <span class="badge bg-warning text-dark">
-                            <i class="bi bi-star-fill"></i> {{ $course['rating'] }} ({{ $course['reviews'] }})
+                            <i class="bi bi-star-fill"></i> {{ $course->rating }}
                         </span>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{ $course['title'] }}</h5>
-                        <p class="card-subtitle text-muted mb-3">{{ $course['subject'] }}</p>
-                        <p class="card-text">{{ $course['description'] }}</p>
+                        <h5 class="card-title">{{ $course->course_name }}</h5>
+                        <p class="card-subtitle text-muted mb-3">{{ $course->nama_mapel }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <small class="text-muted">
+                                <i class="bi bi-collection-play me-1"></i> {{ $course->getTotalVideos() }} Video
+                            </small>
+                            <small class="text-muted">
+                                <i class="bi bi-clock me-1"></i> {{ $course->getTotalDuration() }} Menit
+                            </small>
+                        </div>
                     </div>
                 </div>
             </a>
@@ -133,18 +141,4 @@
         height: 100%;
     }
 </style>
-@endpush
-
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Example script for filtering animation
-        const filterButtons = document.querySelectorAll('.btn-outline-secondary, .btn-primary');
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Add click animation if needed
-            });
-        });
-    });
-</script>
 @endpush

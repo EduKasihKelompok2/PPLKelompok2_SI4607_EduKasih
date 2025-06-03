@@ -11,6 +11,7 @@
         </button>
     </div>
 
+    <!-- Flash Messages -->
     @if (session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
@@ -34,12 +35,22 @@
     @else
     @foreach($groupedJadwals as $day => $jadwals)
     <div class="mb-4">
-        <div class="day-header d-flex align-items-center bg-light rounded pb-2">
-            <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-2"
-                style="width:40px; height:40px;">
-                <i class="bi bi-calendar-week text-primary fs-4"></i>
+        <div class="day-header d-flex align-items-center justify-content-between bg-light rounded p-3 mb-3">
+            <div class="d-flex align-items-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3"
+                    style="width:50px; height:50px;">
+                    <i class="bi bi-calendar-week text-primary fs-4"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-0">{{ $day }}</h3>
+                    @if(isset($currentWeekDates[$day]))
+                    <small class="text-muted">{{ $currentWeekDates[$day]['formatted_date'] }}</small>
+                    @endif
+                </div>
             </div>
-            <h3 class="fw-bold mb-0">{{ $day }}</h3>
+            <div class="badge bg-primary rounded-pill">
+                {{ count($jadwals) }} jadwal
+            </div>
         </div>
 
         <div class="d-flex overflow-x-auto py-3" style="gap: 1rem;">
@@ -58,12 +69,6 @@
                             <tbody>
                                 <tr>
                                     <th class="text-muted" style="width: 120px;">
-                                        <i class="bi bi-calendar-date me-1"></i> Tanggal
-                                    </th>
-                                    <td class="fw-medium">{{ $jadwal->tanggal }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-muted" style="width: 120px;">
                                         <i class="bi bi-clock me-1"></i> Waktu
                                     </th>
                                     <td class="fw-medium">{{ $jadwal->jam }}</td>
@@ -80,12 +85,12 @@
                     <div class="d-flex mt-3">
                         <button class="btn btn-primary btn-sm me-2 btn-edit" data-id="{{ $jadwal->id }}"
                             data-nama="{{ $jadwal->nama_mapel }}" data-jam="{{ $jadwal->jam }}"
-                            data-hari="{{ $jadwal->hari }}" data-tanggal="{{ $jadwal->tanggal }}" data-keterangan="{{ $jadwal->keterangan }}">
+                            data-hari="{{ $jadwal->hari }}" data-keterangan="{{ $jadwal->keterangan }}">
                             <i class="bi bi-pencil me-1"></i> EDIT
                         </button>
                         <button class="btn btn-danger btn-sm btn-delete" data-id="{{ $jadwal->id }}"
                             data-nama="{{ $jadwal->nama_mapel }}" data-jam="{{ $jadwal->jam }}"
-                            data-hari="{{ $jadwal->hari }}" data-tanggal="{{ $jadwal->tanggal }}">
+                            data-hari="{{ $jadwal->hari }}">
                             <i class="bi bi-trash me-1"></i> HAPUS
                         </button>
                     </div>
@@ -98,6 +103,7 @@
     @endif
 </div>
 
+<!-- Add Schedule Modal -->
 <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -155,14 +161,6 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="tanggal" class="form-label">Tanggal</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
-                            <input type="date" class="form-control" id="tanggal" name="tanggal" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
                         <label for="keterangan" class="form-label">Keterangan</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-info-circle"></i></span>
@@ -180,6 +178,7 @@
     </div>
 </div>
 
+<!-- Edit Schedule Modal (Single reusable modal) -->
 <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-labelledby="editScheduleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -237,14 +236,6 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="edit_tanggal" class="form-label">Tanggal</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
-                            <input type="date" class="form-control" id="edit_tanggal" name="tanggal" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
                         <label for="edit_keterangan" class="form-label">Keterangan</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-info-circle"></i></span>
@@ -262,6 +253,7 @@
     </div>
 </div>
 
+<!-- Delete Confirmation Modal (Single reusable modal) -->
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -309,6 +301,12 @@
         transform: translateY(-2px);
     }
 
+    /* Day header styling */
+    .day-header {
+        border-left: 4px solid var(--bs-primary);
+        background: linear-gradient(135deg, var(--bs-light) 0%, rgba(var(--bs-primary-rgb), 0.05) 100%);
+    }
+
     /* Custom icons for different subjects */
     .schedule-icon {
         width: 40px;
@@ -330,6 +328,29 @@
     .form-select:focus {
         border-color: #86b7fe;
         box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    /* Badge styling */
+    .badge {
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .day-header {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 0.5rem;
+        }
+
+        .day-header .d-flex:first-child {
+            width: 100%;
+        }
+
+        .badge {
+            align-self: flex-end;
+        }
     }
 </style>
 @endpush
@@ -364,7 +385,6 @@
                 const nama = this.getAttribute('data-nama');
                 const jam = this.getAttribute('data-jam');
                 const hari = this.getAttribute('data-hari');
-                const tanggal = this.getAttribute('data-tanggal');
                 const keterangan = this.getAttribute('data-keterangan');
 
                 // Set form action URL
@@ -374,7 +394,6 @@
                 document.getElementById('edit_nama_mapel').value = nama;
                 document.getElementById('edit_jam').value = jam;
                 document.getElementById('edit_hari').value = hari;
-                document.getElementById('edit_tanggal').value = tanggal;
                 document.getElementById('edit_keterangan').value = keterangan;
 
                 // Show modal using Bootstrap's API
@@ -391,7 +410,6 @@
                 const id = this.getAttribute('data-id');
                 const nama = this.getAttribute('data-nama');
                 const hari = this.getAttribute('data-hari');
-                const tanggal = this.getAttribute('data-tanggal');
                 const jam = this.getAttribute('data-jam');
 
                 // Set form action URL

@@ -21,7 +21,7 @@ class Articles extends Model
         return $query->where('type', 'motivasi');
     }
 
-     public function scopePendidikan($query)
+    public function scopePendidikan($query)
     {
         return $query->where('type', 'pendidikan');
     }
@@ -32,5 +32,4 @@ class Articles extends Model
             return $query->where('judul', 'like', '%' . $search . '%');
         });
     }
-    
 }

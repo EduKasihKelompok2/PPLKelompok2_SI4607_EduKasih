@@ -20,25 +20,25 @@ class Forum extends Model
         'image',
     ];
 
-    
+    // Define relationships
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    
+    // Get replies to this forum post
     public function feedback()
     {
         return $this->hasMany(Forum::class, 'forum_id')->where('is_feedback', true)->orderBy('created_at');
     }
 
-    
+    // Scope to get only main forum posts (not replies)
     public function scopeMainPosts($query)
     {
         return $query->whereNull('forum_id')->orWhere('is_feedback', false);
     }
 
-    
+    // Scope for search functionality
     public function scopeFilter($query, array $filters)
     {
         if ($filters['search'] ?? false) {

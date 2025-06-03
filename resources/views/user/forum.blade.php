@@ -4,7 +4,7 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-9">
-            <!-- Forum Header -->
+            
             <div class="card shadow border-0 mb-4 bg-gradient">
                 <div class="card-body text-center bg-primary bg-gradient text-white p-5 rounded">
                     <h1 class="display-4 fw-bold">Forum Diskusi</h1>
@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <!-- Flash Messages -->
+            
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show mb-4 shadow-sm border-0 rounded-3" role="alert">
                 <div class="d-flex align-items-center">
@@ -55,7 +55,7 @@
             </div>
             @endif
 
-            <!-- Create New Forum Form (Collapsible) -->
+            
             <div class="collapse mb-4" id="newForumForm">
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
@@ -103,7 +103,7 @@
                 </div>
             </div>
 
-            <!-- Search Bar -->
+            
             <div class="mb-4">
                 <form action="{{ route('forum.index') }}" method="GET">
                     <div class="input-group input-group-lg shadow-sm">
@@ -119,7 +119,7 @@
                 </form>
             </div>
 
-            <!-- Forum Thread List -->
+            
             @forelse($forums as $forum)
             <div class="card shadow-sm border-0 mb-4 forum-card" id="forum-card-{{ $forum->id }}">
                 <div class="card-header bg-white border-0 px-4 py-3">
@@ -138,7 +138,7 @@
                         <div class="ms-3">
                             <h6 class="mb-0 fw-bold">{{ $forum->user->name }}</h6>
 
-                            <!-- Display user badges -->
+                            
                             @if($forum->user->badges && $forum->user->badges->count() > 0)
                             <div class="d-flex gap-1 mt-1">
                                 @foreach($forum->user->badges->take(3) as $badge)
@@ -191,7 +191,7 @@
                 </div>
 
                 <div class="card-body px-4 py-3">
-                    <!-- Forum content -->
+                    
                     <div class="forum-content" id="forum-content-{{ $forum->id }}">
                         <h5 class="fw-bold mb-3 text-primary">{{ $forum->title }}</h5>
                         <p class="mb-3 forum-text">{{ $forum->description }}</p>
@@ -204,7 +204,7 @@
                         @endif
                     </div>
 
-                    <!-- Edit Forum Form (initially hidden) -->
+                    
                     <div class="forum-edit-form d-none" id="forum-edit-{{ $forum->id }}">
                         <form action="{{ route('forum.update', $forum->id) }}" method="POST"
                             enctype="multipart/form-data" class="forum-edit-form-content">
@@ -264,7 +264,7 @@
 
                 <div class="replies-container bg-light px-4 pt-3 pb-4 rounded-bottom d-none"
                     id="replies-container-{{ $forum->id }}">
-                    <!-- Reply form -->
+                    
                     <div class="reply-form mb-4 d-none" id="reply-form-{{ $forum->id }}">
                         <form action="{{ route('forum.reply', $forum->id) }}" method="POST"
                             enctype="multipart/form-data" class="reply-form-content">
@@ -320,11 +320,11 @@
                         </form>
                     </div>
 
-                    <!-- Replies Header -->
+                    
                     @if($forum->feedback->count() > 0)
                     <h6 class="text-secondary mb-3 fw-bold">Semua Balasan</h6>
 
-                    <!-- List of replies -->
+                    
                     <div class="replies-list">
                         @foreach($forum->feedback as $reply)
                         <div class="reply-item mb-3">
@@ -345,7 +345,7 @@
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <h6 class="mb-0 fw-bold">{{ $reply->user->name }}</h6>
 
-                                            <!-- Display user badges for replies -->
+                                            
                                             @if($reply->user->badges && $reply->user->badges->count() > 0)
                                             <div class="d-flex gap-1 mt-1">
                                                 @foreach($reply->user->badges->take(2) as $badge)
@@ -397,7 +397,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Reply content -->
+                                        
                                         <div class="reply-content" id="reply-content-{{ $reply->id }}">
                                             <p class="mb-2">{{ $reply->description }}</p>
                                             @if($reply->image)
@@ -407,7 +407,7 @@
                                             @endif
                                         </div>
 
-                                        <!-- Edit Reply Form (initially hidden) -->
+                                        
                                         <div class="reply-edit-form d-none" id="reply-edit-{{ $reply->id }}">
                                             <form action="{{ route('forum.update', $reply->id) }}" method="POST"
                                                 enctype="multipart/form-data">
@@ -477,7 +477,7 @@
             </div>
             @endforelse
 
-            <!-- Pagination -->
+            
             @if(isset($forums) && $forums->hasPages())
             <div class="d-flex justify-content-center mt-4 mb-4">
                 <nav aria-label="Forum pagination" class="pagination-nav">
@@ -492,13 +492,13 @@
 
 @push('styles')
 <style>
-    /* Base styles */
+    
     body {
         background-color: #f8f9fa;
         color: #444;
     }
 
-    /* Avatar styles */
+    
     .avatar-md {
         width: 48px;
         height: 48px;
@@ -522,7 +522,7 @@
         object-fit: cover;
     }
 
-    /* Badge styles */
+    
     .badge-icon {
         border-radius: 50%;
         object-fit: cover;
@@ -535,12 +535,7 @@
         padding: 0.2rem 0.4rem;
     }
 
-    /* Tooltip adjustments */
-    .tooltip {
-        z-index: 10000;
-    }
-
-    /* Card styles */
+    
     .card {
         border-radius: 0.85rem;
         transition: all 0.2s ease;
@@ -556,425 +551,306 @@
         box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08) !important;
     }
 
+    
     .replies-container {
         border-top: 1px solid #eee;
+    }
 
-        .reply-item {}
+    .reply-bubble {
+        position: relative;
+        border: 1px solid #f0f0f0;
+    }
 
-        em;
+    
+    .btn-primary {
+        background-color: #6610f2;
+        border-color: #6610f2;
+    }
 
-        .reply-bubble {
-            position: relative;
-            * Button styles */ border: 1px solid #f0f0f0;
+    .btn-primary:hover {
+        background-color: #520dc2;
+        border-color: #520dc2;
+    }
 
-            .btn-primary {
-                max-height: 150px;
-                610f2;
-            }
+    .btn-light {
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+    }
 
-            6610f2;
+    .btn-light:hover {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+    }
 
-            /* Pagination styling */
-            .pagination {
-                btn-primary:hover {
-                    margin-bottom: 0;
-                    background-color: #520dc2;
-                }
+    .btn-outline-primary {
+        color: #6610f2;
+        border-color: #6610f2;
+    }
 
-                .pagination .page-link {
-                    color: #6610f2;
+    .btn-outline-primary:hover {
+        background-color: #6610f2;
+        border-color: #6610f2;
+        color: white;
+    }
 
-                    btn-light {
-                        border-radius: 0.35rem;
-                        background-color: #f8f9fa;
-                        margin: 0 2px;
-                        ecef;
-                    }
+    
+    .form-control:focus {
+        border-color: rgba(102, 16, 242, 0.4);
+        box-shadow: 0 0 0 0.25rem rgba(102, 16, 242, 0.25);
+    }
 
-                    .pagination .page-item.active .page-link {
-                        btn-light:hover {
-                            background-color: #6610f2;
-                            background-color: #e9ecef;
-                            border-color: #6610f2;
-                        }
+    
+    .pagination {
+        margin-bottom: 0;
+    }
 
-                        /* Dropdown styles */
-                        .dropdown-toggle::after {
-                            portant;
-                            display: none;
-                        }
+    .pagination .page-link {
+        color: #6610f2;
+        border-radius: 0.35rem;
+        margin: 0 2px;
+    }
 
-                        .dropdown-menu {
-                            border-radius: 0.5rem;
-                            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-                            border: none;
-                            padding: 0.5rem 0;
-                        }
+    .pagination .page-item.active .page-link {
+        background-color: #6610f2;
+        border-color: #6610f2;
+    }
 
-                        border-color: rgba(102, 16, 242, 0.4);
-                        box-shadow: 0 0 0 0.25rem rgba(102, 16, 242, 0.25);
+    
+    .dropdown-toggle::after {
+        display: none;
+    }
 
-                        .dropdown-item {
-                            padding: 0.5rem 1.25rem;
-                        }
+    .dropdown-menu {
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        border: none;
+        padding: 0.5rem 0;
+    }
 
-                        */ .dropdown-item:hover {
-                            background-color: #f8f9fa;
-                            object-fit: contain;
-                        }
-                    }
+    .dropdown-item {
+        padding: 0.5rem 1.25rem;
+    }
 
-                    /* Animation for showing/hiding forms */
-                    img {
-                        .reply-form,
-                        ;
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+    }
 
-                        .forum-edit-form,
-                        .reply-edit-form {
-                            transition: all 0.3s ease;
-                            /* Pagination styling */
-                        }
+    
+    .reply-form,
+    .forum-edit-form,
+    .reply-edit-form {
+        transition: all 0.3s ease;
+    }
 
-                        margin-bottom: 0;
-                    }
+    
+    .remove-image,
+    .remove-reply-image {
+        opacity: 0.8;
+    }
 
-                    * Remove image button */ .remove-image,
-                    .pagination .page-link {
-                        .pagination .page-link {
-                            color: #6610f2;
-                            border-radius: 0.35rem;
-                            margin: 0 2px;
-                        }
+    .remove-image:hover,
+    .remove-reply-image:hover {
+        opacity: 1;
+    }
 
-                        remove-image:hover,
-                        .remove-reply-image:hover {
-                            .pagination .page-item.active .page-link {
-                                active .page-link {
-                                    background-color: #6610f2;
-                                    border-color: #6610f2;
-                                }
+    
+    .toggle-replies-btn {
+        color: #6610f2;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
 
-                                * Reply count styles */ .reply-count {
+    .toggle-replies-btn:hover {
+        color: #520dc2;
+    }
 
-                                    /* Dropdown styles */
-                                    /* Dropdown styles */
-                                    .dropdown-toggle::after {
-                                        display: none;
-                                    }
+    .toggle-icon-transition {
+        transition: transform 0.3s;
+    }
 
-                                    /* Alert styling */
-                                    .dropdown-menu {
-                                        border-radius: 0.5rem;
-                                        ;
-                                        border-radius: 0.5rem;
-                                        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-                                        .15);
-                                        border: none;
-                                        padding: 0.5rem 0;
-                                        on styling */ 0;
-                                    }
+    
+    .bg-primary {
+        background-color: #6610f2 !important;
+    }
 
-                                    toggle-replies-btn {
-                                        color: #6610f2;
+    .bg-primary-subtle {
+        background-color: rgba(102, 16, 242, 0.15) !important;
+    }
 
-                                        .dropdown-item {
-                                            ion: none;
-                                            padding: 0.5rem 1.25rem;
-                                        }
+    .border-primary {
+        border-color: #6610f2 !important;
+    }
 
-                                        .dropdown-item:hover {
-                                            ver {
-                                                background-color: #f8f9fa;
-                                                8f9fa;
-                                            }
+    
+    img {
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
 
-                                            /* Animation for showing/hiding forms */
-                                            n for showing/hiding forms */ .reply-form,
-                                            on: transform 0.3s;
+    
+    .alert {
+        border-radius: 0.75rem;
+    }
 
-                                            .forum-edit-form,
-                                            .reply-edit-form {
-                                                transition: all 0.3s ease;
-                                                transition: all 0.3s ease;
-                                            }
+    
+    .reply-count {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+</style>
+@endpush
 
-                                            bg-primary {
-                                                background-color: #6610f2 !important;
-
-                                                /* Remove image button */
-                                                .remove-image,
-                                                .remove-reply-image {
-                                                    opacity: 0.8;
-                                                    lor: rgba(102, 16, 242, 0.15) !important;
-                                                }
-
-                                                .remove-image:hover,
-                                                ove-image:hover,
-                                                .remove-reply-image:hover {
-                                                    important;
-
-                                                    .remove-reply-image:hover {
-                                                        opacity: 1;
-                                                    }
-
-                                                    /* Input field outlines */
-                                                    /* Reply count styles */
-                                                    Reply count styles */ .reply-count {
-                                                        10f2;
-
-                                                        ly-count {
-                                                            color: #6c757d;
-                                                            6610f2;
-                                                            color: #6c757d;
-                                                            font-size: 0.9rem;
-                                                            9rem;
-                                                        }
-
-                                                        .btn-outline-primary:hover {
-                                                            /* Alert styling */
-                                                            r: #6610f2;
-
-                                                            .alert {
-                                                                er-color: #6610f2;
-                                                                border-radius: 0.75rem;
-                                                                5rem;
-                                                            }
-
-                                                            le>@endpush
-
-                                                            /* Toggle replies button styling */
-                                                            .toggle-replies-btn {
-                                                                color: #6610f2;
-                                                                ry -->text-decoration: none;
-                                                                ry.com/jquery-3.7.1.min.js"one;
- transition: color 0.2s;
-                                                                wRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin=" anonymous"></script>
-
-                                                            }
-
-                                                            < !-- Then include your custom scripts -->.toggle-replies-btn:hover {
-                                                                color: #520dc2;
-
-                                                                stener('DOMContentLoaded', function() {}
-
-                                                                    // Check if jQuery is available
-                                                                    if (typeof jQuery !=='undefined') {
-                                                                        .toggle-icon-transition {
-                                                                            transition: transform 0.3s; rds transform 0.3s;
-                                                                        }
-
-                                                                        $('.forum-card').addClass('animate__animated animate__fadeIn');
-                                                                    }
-
-                                                                    /* Background colors */
-                                                                    eplies container visibility .bg-primary {
-                                                                        ('.toggle-replies-btn').click(function() {
-                                                                                background-color: #6610f2 !important; ata('id');
-                                                                            }
-
-                                                                            $(`#replies-container-${forumId}`).toggleClass('d-none');
-                                                                            $(`.toggle-icon-${forumId}`).toggleClass('bi-chevron-down bi-chevron-up');
-
-                                                                            .bg-primary-subtle {
-                                                                                background-color: rgba(102, 16, 242, 0.15) !important;
-                                                                            }
-
-                                                                            // Toggle reply form visibility
-                                                                            $('.toggle-reply-btn').click(function() {
-                                                                                    .border-primary {
-                                                                                        onst forumId=$(this).data('id');
-                                                                                        border-color: #6610f2 !important; container is visible firstr: #6610f2 !important;
-                                                                                    }
-
-                                                                                    $(`#replies-container-${forumId}`).removeClass('d-none');
-                                                                                }
-
-                                                                                $(`.toggle-icon-${forumId}`).removeClass('bi-chevron-down').addClass('bi-chevron-up');
-
-                                                                                /* Input field outlines */
-                                                                                ggle reply form .btn-outline-primary {
-                                                                                    ply-form-${forumId}`).toggleClass('d-none');
-
-                                                                                color: #6610f2; ( !$(`#reply-form-${forumId}`).hasClass('d-none')) {
-                                                                                    border-color: #6610f2; ply-form-${forumId}`).find('textarea').focus();
-                                                                            }
-                                                                        }
-                                                                    });
-
-                                                                .btn-outline-primary:hover {
-                                                                    background-color: #6610f2;
-                                                                    border-color: #6610f2;
-                                                                    ly').click(function() {r: #6610f2;
-
-                                                                }
-
-                                                                const forumId=$(this).data('id');
-                                                            }
-</style> $('#reply-form-' + forumId).addClass('d-none');
-@endpush // Clear the textarea and image preview
-$('#reply-form-' + forumId).find('textarea').val('');
-@push('scripts') $('#reply-form-' + forumId).find('.image-preview').addClass('d-none');
-<!-- First include jQuery -->name-' + forumId).text('');
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" ut[type="file" ]').val('');
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-<!-- Then include your custom scripts -->
 <script>
-    $('.edit-forum').click(function(e) {
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize tooltipshis).data('id');
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');rumId).addClass('d-none');
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));rum-edit-' + forumId).removeClass('d-none');ion() {
-        Animation for cards
-        // Check if jQuery is available
-        if (typeof jQuery !== 'undefined') {                // Cancel edit forum
-            $(function() {er visibility
-                // Animation for cards
-                $('.forum-card').addClass('animate__animated animate__fadeIn');veClass('d-none');
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
-                // Toggle replies container visibility
-                $('.toggle-replies-btn').click(function() {
-                    const forumId = $(this).data('id');                // Edit reply
-                    $(`#replies-container-${forumId}`).toggleClass('d-none');(e) {
-                    $(`.toggle-icon-${forumId}`).toggleClass('bi-chevron-down bi-chevron-up');
-                });
-');
-                // Toggle reply form visibilityplies-container-${forumId}`).removeClass('d-none');
-                $('.toggle-reply-btn').click(function() {s('bi-chevron-up');
-                    const forumId = $(this).data('id');
-                    // Make sure replies container is visible first
-                    $(`#replies-container-${forumId}`).removeClass('d-none');e')) {
-                    $(`.toggle-icon-${forumId}`).removeClass('bi-chevron-down').addClass('bi-chevron-up');
-                    // Then toggle reply form('#reply-content-' + replyId).removeClass('d-none');
-                    $(`#reply-form-${forumId}`).toggleClass('d-none'); $('#reply-edit-' + replyId).addClass('d-none');
-                    if (!$(`#reply-form-${forumId}`).hasClass('d-none')) {                });
-                        $(`#reply-form-${forumId}`).find('textarea').focus();
-                    }-reply').click(function() {
-                });                   const forumId = $(this).data('id');
-none');
-                // Cancel replyw
-                $('.cancel-reply').click(function() {nd('textarea').val('');
-                    const forumId = $(this).data('id');.addClass('d-none');
-                    $('#reply-form-' + forumId).addClass('d-none');l);
-                    // Clear the textarea and image preview);
-                    $('#reply-form-' + forumId).find('textarea').val('');                });
-                    $('#reply-form-' + forumId).find('.image-preview').addClass('d-none');
-                    $('.file-name-' + forumId).text('');r new forum
-                    $('#reply-form-' + forumId).find('input[type="file"]').val(''); {
-                });
+    
+    if (typeof jQuery !== 'undefined') {
+        $(function() {
+            
+            $('.forum-card').addClass('animate__animated animate__fadeIn');
 
-                // Edit forum post-none');
-                $('.edit-forum').click(function(e) {oveClass('d-none');
+            
+            $('.toggle-replies-btn').click(function() {
+                const forumId = $(this).data('id');
+                $(`#replies-container-${forumId}`).toggleClass('d-none');
+                $(`.toggle-icon-${forumId}`).toggleClass('bi-chevron-down bi-chevron-up');
+            });
+
+            
+            $('.toggle-reply-btn').click(function() {
+                const forumId = $(this).data('id');
+                
+                $(`#replies-container-${forumId}`).removeClass('d-none');
+                $(`.toggle-icon-${forumId}`).removeClass('bi-chevron-down').addClass('bi-chevron-up');
+                
+                $(`#reply-form-${forumId}`).toggleClass('d-none');
+                if (!$(`#reply-form-${forumId}`).hasClass('d-none')) {
+                    $(`#reply-form-${forumId}`).find('textarea').focus();
+                }
+            });
+
+            
+            $('.cancel-reply').click(function() {
+                const forumId = $(this).data('id');
+                $('#reply-form-' + forumId).addClass('d-none');
+                
+                $('#reply-form-' + forumId).find('textarea').val('');
+                $('#reply-form-' + forumId).find('.image-preview').addClass('d-none');
+                $('.file-name-' + forumId).text('');
+                $('#reply-form-' + forumId).find('input[type="file"]').val('');
+            });
+
+            
+            $('.edit-forum').click(function(e) {
+                e.preventDefault();
+                const forumId = $(this).data('id');
+                $('#forum-content-' + forumId).addClass('d-none');
+                $('#forum-edit-' + forumId).removeClass('d-none');
+            });
+
+            
+            $('.cancel-edit').click(function() {
+                const forumId = $(this).data('id');
+                $('#forum-content-' + forumId).removeClass('d-none');
+                $('#forum-edit-' + forumId).addClass('d-none');
+            });
+
+            
+            $('.edit-reply').click(function(e) {
+                e.preventDefault();
+                const replyId = $(this).data('id');
+                $('#reply-content-' + replyId).addClass('d-none');
+                $('#reply-edit-' + replyId).removeClass('d-none');
+            });
+
+            
+            $('.cancel-edit-reply').click(function() {
+                const replyId = $(this).data('id');
+                $('#reply-content-' + replyId).removeClass('d-none');
+                $('#reply-edit-' + replyId).addClass('d-none');
+            });
+
+            
+            $('#forum_image').change(function(e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    const url = URL.createObjectURL(file);
+                    $('.image-preview').removeClass('d-none');
+                    $('.preview-img').attr('src', url);
+                }
+            });
+
+            
+            $('.remove-image').click(function(e) {
+                e.preventDefault();
+                $('#forum_image').val('');
+                $('.image-preview').addClass('d-none');
+            });
+
+            
+            $('input[type="file"][name="image"]').change(function(e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    const url = URL.createObjectURL(file);
+                    const fileName = file.name;
+
+                    
+                    const previewDiv = $(this).closest('.image-upload-wrapper').find('.image-preview');
+                    previewDiv.removeClass('d-none');
+                    previewDiv.find('.preview-img').attr('src', url);
+
+                    
+                    const forumId = $(this).attr('id').split('-')[1];
+                    if (forumId) {
+                        $('.file-name-' + forumId).text(fileName);
+                    }
+
+                    
+                    $(this).next('label').html('<i class="bi bi-image me-1"></i> ' + fileName.substring(0, 15) + (fileName.length > 15 ? '...' : ''));
+                }
+            });
+
+            
+            $('.remove-reply-image').click(function(e) {
+                e.preventDefault();
+                const wrapper = $(this).closest('.image-upload-wrapper');
+                wrapper.find('input[type="file"]').val('');
+                wrapper.find('.image-preview').addClass('d-none');
+                wrapper.find('label').html('<i class="bi bi-image me-1"></i> Tambah Gambar');
+
+                
+                const forumId = wrapper.find('input[type="file"]').attr('id').split('-')[1];
+                if (forumId) {
+                    $('.file-name-' + forumId).text('');
+                }
+            });
+
+            
+            $('.delete-form').submit(function(e) {
+                if (!confirm('Apakah Anda yakin ingin menghapus?')) {
                     e.preventDefault();
-                    const forumId = $(this).data('id');                // Image preview for replies
-                    $('#forum-content-' + forumId).addClass('d-none');][name="image"]').change(function(e) {
-                    $('#forum-edit-' + forumId).removeClass('d-none');
-                });                    const forumId = $(this).data('id');
-ass('d-none');
-                // Cancel edit forum
-                $('.cancel-edit').click(function() {
-                    const forumId = $(this).data('id');                        // Update image preview in parent form
-                    $('#forum-content-' + forumId).removeClass('d-none'); previewDiv = $(this).closest('.image-upload-wrapper').find('.image-preview');eply
-                    $('#forum-edit-' + forumId).addClass('d-none');ne');                $('.edit-reply').click(function(e) {
-                });('.preview-img').attr('src', url);
+                }
+            });
 
-                // Edit replyeplyId).addClass('d-none');
-                $('.edit-reply').click(function(e) {1]; $('#reply-edit-' + replyId).removeClass('d-none');
-                    e.preventDefault();     if (forumId) {                });
-                    const replyId = $(this).data('id');                            $('.file-name-' + forumId).text(fileName);
-                    $('#reply-content-' + replyId).addClass('d-none');
-                    $('#reply-edit-' + replyId).removeClass('d-none');
-                });
- me-1"></i> ' + fileName.substring(0, 15) + (fileName.length > 15 ? '...' : ''));'d-none');
-                // Cancel edit reply
-                $('.cancel-edit-reply').click(function() {
-                    const replyId = $(this).data('id');
-                    $('#reply-content-' + replyId).removeClass('d-none');
-                    $('#reply-edit-' + replyId).addClass('d-none');n(e) {
-                }); 0) {
-mage-upload-wrapper');
-                // Image preview for new forum;   const url = URL.createObjectURL(file);
-                $('#forum_image').change(function(e) {e');     $('.image-preview').removeClass('d-none');
-                    if (e.target.files.length > 0) {i bi-image me-1"></i> Tambah Gambar');                        $('.preview-img').attr('src', url);
-                        const file = e.target.files[0];
-                        const url = URL.createObjectURL(file); // Clear file name
-                        $('.image-preview').removeClass('d-none');                    const forumId = wrapper.find('input[type="file"]').attr('id').split('-')[1];
-                        $('.preview-img').attr('src', url);
-                    }t('');emove-image').click(function(e) {
-                }););
-um_image').val('');
-                // Remove image for new forum
-                $('.remove-image').click(function(e) {Confirmation before deleting
-                    e.preventDefault();                $('.delete-form').submit(function(e) {
-                    $('#forum_image').val('');a yakin ingin menghapus?')) {s
-                    $('.image-preview').addClass('d-none');
-                });
-
-                // Image preview for replies
-                $('input[type="file"][name="image"]').change(function(e) {t fileName = file.name;
-                    if (e.target.files.length > 0) {                $('textarea').each(function() {
-                        const file = e.target.files[0];is.scrollHeight) + 'px;overflow-y:hidden;');               // Update image preview in parent form
-                        const url = URL.createObjectURL(file);ad-wrapper').find('.image-preview');
-                        const fileName = file.name;     previewDiv.removeClass('d-none');
-          previewDiv.find('.preview-img').attr('src', url);
-                        // Update image preview in parent form                });
-                        const previewDiv = $(this).closest('.image-upload-wrapper').find('.image-preview');
-                        previewDiv.removeClass('d-none');
-                        previewDiv.find('.preview-img').attr('src', url);
-
-                        // Update file name text
-                        const forumId = $(this).attr('id').split('-')[1];
-                        if (forumId) {
-                            $('.file-name-' + forumId).text(fileName);
-                        }});        }            console.error('jQuery is not loaded. Please include jQuery before running this script.');        } else {            });                        // Update file name text
-     const forumId = $(this).attr('id').split('-')[1];
-                        // Update button label                        if (forumId) {
-                        $(this).next('label').html('<i class="bi bi-image me-1"></i> ' + fileName.substring(0, 15) + (fileName.length > 15 ? '...' : ''));name-' + forumId).text(fileName);
-                    }
-                });
-
-                // Remove reply imagei bi-image me-1"></i> ' + fileName.substring(0, 15) + (fileName.length > 15 ? '...' : ''));
-                $('.remove-reply-image').click(function(e) {
-                    e.preventDefault();
-                    const wrapper = $(this).closest('.image-upload-wrapper');
-                    wrapper.find('input[type="file"]').val('');
-                    wrapper.find('.image-preview').addClass('d-none');
-                    wrapper.find('label').html('<i class="bi bi-image me-1"></i> Tambah Gambar');lt();
-upload-wrapper');
-                    // Clear file namerapper.find('input[type="file"]').val('');
-                    const forumId = wrapper.find('input[type="file"]').attr('id').split('-')[1]; wrapper.find('.image-preview').addClass('d-none');
-                    if (forumId) {                    wrapper.find('label').html('<i class="bi bi-image me-1"></i> Tambah Gambar');
-                        $('.file-name-' + forumId).text('');
-                    }
-                });tr('id').split('-')[1];
-
-                // Confirmation before deleting   $('.file-name-' + forumId).text('');
-                $('.delete-form').submit(function(e) { }
-                    if (!confirm('Apakah Anda yakin ingin menghapus?')) {                });
-                        e.preventDefault();
-                    }
-                });
-da yakin ingin menghapus?')) {
-                // Auto-resize textarea
-                $('textarea').each(function() {
-                    this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
-                }).on('input', function() {
-                    this.style.height = 'auto';// Auto-resize textarea
-                    this.style.height = (this.scrollHeight) + 'px';
-                });           this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
-            });         }).on('input', function() {
-        } else {           this.style.height = 'auto';
-            console.error('jQuery is not loaded. Please include jQuery before running this script.');            this.style.height = (this.scrollHeight) + 'px';
-        }                });
-
-
-
-
-@endpush
-</script> }); });
-} else {
-console.error('jQuery is not loaded. Please include jQuery before running this script.');
-}
+            
+            $('textarea').each(function() {
+                this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+            }).on('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        });
+    } else {
+        console.error('jQuery is not loaded. Please include jQuery before running this script.');
+    }
 });
 </script>
 @endpush
