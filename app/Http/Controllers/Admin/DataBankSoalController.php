@@ -42,6 +42,7 @@ class DataBankSoalController extends Controller
         // Handle file upload
         $file = $request->file('file');
         $filePath = $file->store('bank-soal', 'public');
+        //$filePath = $file->storeAs('bank-soal', 'soal_test.pdf', 'public');
 
         // Create record
         BankSoal::create([
