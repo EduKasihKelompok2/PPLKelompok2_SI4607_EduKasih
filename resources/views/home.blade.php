@@ -8,17 +8,17 @@
         @php
         $menus = [
         ['icon' => 'person-circle', 'text' => 'Edit Profil', 'link' => route('profile')],
-        ['icon' => 'book', 'text' => 'Daftar Bantuan', 'link' => '#'],
+        ['icon' => 'book', 'text' => 'Daftar Bantuan', 'link' => route('daftar-bantuan')],
         ['icon' => 'calendar', 'text' => 'Jadwal Belajar', 'link' => route('jadwal-belajar')],
-        ['icon' => 'file-earmark-text', 'text' => 'Artikel Pendidikan', 'link' => '#'],
+        ['icon' => 'file-earmark-text', 'text' => 'Artikel Pendidikan', 'link' => route('articles.pendidikan')],
         ['icon' => 'play-circle', 'text' => 'E-Course', 'link' => route('e-course')],
         ['icon' => 'star', 'text' => 'Reward', 'link' => '#'],
         ['icon' => 'search', 'text' => 'Cari Sekolah', 'link' => route('pencarian-sekolah')],
-        ['icon' => 'chat-left-dots', 'text' => 'Forum Diskusi', 'link' => '#'],
+        ['icon' => 'chat-left-dots', 'text' => 'Forum Diskusi', 'link' => route('forum.index')],
         ['icon' => 'journal-text', 'text' => 'Bank Soal', 'link' => route('bank-soal')],
-        ['icon' => 'lightbulb', 'text' => 'Artikel Motivasi', 'link' => '#'],
+        ['icon' => 'lightbulb', 'text' => 'Artikel Motivasi', 'link' => route('articles.motivasi')],
         ['icon' => 'question-circle', 'text' => 'FAQ', 'link' => route('faq')],
-        ['icon' => 'clock-history', 'text' => 'Riwayat Aktivitas', 'link' => '#'],
+        ['icon' => 'clock-history', 'text' => 'Riwayat Aktivitas', 'link' => route('activity')],
         ];
         @endphp
 
