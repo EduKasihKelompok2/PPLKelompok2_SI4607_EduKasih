@@ -55,7 +55,7 @@ class DataRewardsController extends Controller
         $data = $request->only(['name', 'description', 'badge_id']);
 
         if ($request->hasFile('file')) {
-            // Delete old file if exists
+           
             if ($reward->file_path) {
                 Storage::disk('public')->delete($reward->file_path);
             }
@@ -72,7 +72,7 @@ class DataRewardsController extends Controller
 
     public function destroy(Reward $reward)
     {
-        // Delete file if exists
+        
         if ($reward->file_path) {
             Storage::disk('public')->delete($reward->file_path);
         }
