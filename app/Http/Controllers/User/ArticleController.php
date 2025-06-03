@@ -17,7 +17,13 @@ class ArticleController extends Controller
         $this->activity = new Activity();
     }
 
-    //yang sini isi sha yang indexmotivasi
+    public function indexMotivasi(Request $request)
+    {
+        $articles = Articles::motivasi()->filter($request->all())->latest('tanggal_terbit')->paginate(8);
+
+        
+        return view('user.articles.article-motivasi', compact('articles'));
+    }
 
     public function indexPendidikan(Request $request)
     {
@@ -25,5 +31,9 @@ class ArticleController extends Controller
         return view('user.articles.article-pendidikan', compact('articles'));
     }
 
-    //sama yang show
+    public function show($id)
+    {
+        $article = Articles::findOrFail($id);
+        return view('user.articles.show', compact('article'));
+    }
 }
