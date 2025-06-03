@@ -8,7 +8,7 @@
         @php
         $menus = [
         ['icon' => 'person-circle', 'text' => 'Edit Profil', 'link' => route('profile')],
-        ['icon' => 'book', 'text' => 'Daftar Bantuan', 'link' => '#'],
+        ['icon' => 'book', 'text' => 'Daftar Bantuan', 'link' => route('admin.scholarships.index')],
         ['icon' => 'file-earmark-text', 'text' => 'Artikel Pendidikan', 'link' => route('admin.articles.pendidikan')],
         ['icon' => 'play-circle', 'text' => 'E-Course', 'link' => route('admin.e-course')],
         ['icon' => 'star', 'text' => 'Reward', 'link' => '#'],
@@ -17,7 +17,7 @@
         ['icon' => 'journal-text', 'text' => 'Bank Soal', 'link' => route('admin.bank-soal')],
         ['icon' => 'lightbulb', 'text' => 'Artikel Motivasi', 'link' => route('admin.articles.motivasi')],
         ['icon' => 'question-circle', 'text' => 'FAQ', 'link' => route('admin.faq')],
-        ['icon' => 'award', 'text' => 'Badges', 'link' => '#'],
+        ['icon' => 'award', 'text' => 'Badges', 'link' => route('admin.badges')],
         ];
         @endphp
 

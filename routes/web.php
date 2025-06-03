@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\User\ArticleController;
 use App\Http\Controllers\User\BankSoalController;
+use App\Http\Controllers\User\DaftarBantuanController;
 use App\Http\Controllers\User\ECourseController;
 use App\Http\Controllers\User\ExamController;
 use App\Http\Controllers\User\FAQController;
@@ -62,9 +63,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pencarian-sekolah/{school}', [PencarianSekolahController::class, 'show'])->name('pencarian-sekolah.show');
 
     //Daftar Bantuan
-    Route::get('/daftar-bantuan', function () {
-        return view('user.daftar-bantuan');
-    })->name('daftar-bantuan');
+    Route::get('/daftar-bantuan', [DaftarBantuanController::class, 'index'])->name('daftar-bantuan');
+    Route::get('/daftar-bantuan/{scholarship}', [DaftarBantuanController::class, 'show'])->name('daftar-bantuan.show');
 
     //FAQ
     Route::get('/faq', [FAQController::class, 'index'])->name('faq');
@@ -81,6 +81,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/artikel-motivasi', [ArticleController::class, 'indexMotivasi'])->name('articles.motivasi');
     Route::get('/artikel-pendidikan', [ArticleController::class, 'indexPendidikan'])->name('articles.pendidikan');
     Route::get('/artikel/{id}', [ArticleController::class, 'show'])->name('articles.show');
+
+    // Notifications
+    Route::get('/notification/mark-as-read/{id}', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::get('/notification/mark-all-as-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+
+    // Rewards
+    Route::get('/rewards', [App\Http\Controllers\User\RewardController::class, 'index'])->name('user.rewards');
+    Route::post('/rewards/{reward}/claim', [App\Http\Controllers\User\RewardController::class, 'claim'])->name('user.rewards.claim');
+    Route::get('/rewards/{reward}/download', [App\Http\Controllers\User\RewardController::class, 'download'])->name('user.rewards.download');
 });
 
 // Admin Routes
@@ -134,6 +143,19 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/artikel/add', [App\Http\Controllers\Admin\DataArticleController::class, 'store'])->name('admin.articles.store');
     Route::put('/artikel/update/{article}', [App\Http\Controllers\Admin\DataArticleController::class, 'update'])->name('admin.articles.update');
     Route::delete('/artikel/delete/{article}', [App\Http\Controllers\Admin\DataArticleController::class, 'destroy'])->name('admin.articles.destroy');
+
+    // Admin Daftar Bantuan Routes
+    Route::get('scholarships', [App\Http\Controllers\Admin\DataScholarshipController::class, 'index'])->name('admin.scholarships.index');
+    Route::post('scholarships', [App\Http\Controllers\Admin\DataScholarshipController::class, 'store'])->name('admin.scholarships.store');
+    Route::get('scholarships/{scholarship}', [App\Http\Controllers\Admin\DataScholarshipController::class, 'show'])->name('admin.scholarships.show');
+    Route::put('scholarships/{scholarship}', [App\Http\Controllers\Admin\DataScholarshipController::class, 'update'])->name('admin.scholarships.update');
+    Route::delete('scholarships/{scholarship}', [App\Http\Controllers\Admin\DataScholarshipController::class, 'destroy'])->name('admin.scholarships.destroy');
+
+    //Rewards Management
+    Route::get('/rewards', [App\Http\Controllers\Admin\DataRewardsController::class, 'index'])->name('admin.rewards');
+    Route::post('/rewards', [App\Http\Controllers\Admin\DataRewardsController::class, 'store'])->name('admin.rewards.store');
+    Route::put('/rewards/{reward}', [App\Http\Controllers\Admin\DataRewardsController::class, 'update'])->name('admin.rewards.update');
+    Route::delete('/rewards/{reward}', [App\Http\Controllers\Admin\DataRewardsController::class, 'destroy'])->name('admin.rewards.destroy');
 
     // Badge Management
     Route::get('/badges', [BadgeController::class, 'index'])->name('admin.badges');
